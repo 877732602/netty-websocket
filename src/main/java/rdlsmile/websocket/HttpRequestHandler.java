@@ -4,6 +4,7 @@ import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedNioFile;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -16,7 +17,7 @@ import java.net.URL;
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest>{
     private final String wsUri;
     private static final File INDEX;
-
+private Logger logger = Logger.getLogger(HttpRequestHandler.class);
     static {
         URL location = HttpRequestHandler.class.getProtectionDomain().getCodeSource().getLocation();
         try {
@@ -82,7 +83,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Channel channel = ctx.channel();
-        System.out.println("Client:"+channel.remoteAddress()+"异常");
+        logger.error("Client:"+channel.remoteAddress()+"异常");
         cause.printStackTrace();
         ctx.close();
     }

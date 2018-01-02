@@ -6,10 +6,12 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.apache.log4j.Logger;
 
 public class WebsocketDanmuServer {
 
     private int port;
+    private Logger logger = Logger.getLogger(WebsocketDanmuServer.class);
 
     public WebsocketDanmuServer() {
     }
@@ -32,14 +34,13 @@ public class WebsocketDanmuServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             ChannelFuture f = bootstrap.bind(port).sync();
-            System.out.println("WebSocketDanmuServer 启动了" + port);
-
+            logger.info("WebSocketDanmuServer 启动了" + port);
             f.channel().closeFuture().sync();
 
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
-            System.out.println("关闭了");
+            logger.info("关闭服务");
         }
     }
 
